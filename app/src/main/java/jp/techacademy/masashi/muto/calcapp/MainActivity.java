@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -36,10 +38,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v){
-        String value1 = mEditText.getText().toString();
-        String value2 = mEditText2.getText().toString();
-        double db1 = Double.parseDouble(value1);
-        double db2 = Double.parseDouble(value2);
+        try {
+            String value1 = mEditText.getText().toString();
+            String value2 = mEditText2.getText().toString();
+            double db1 = Double.parseDouble(value1);
+            double db2 = Double.parseDouble(value2);
+
 
         Intent intent = new Intent(this, SecondActivity.class);
         if (v.getId() == R.id.button1){
@@ -49,8 +53,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.getId() == R.id.button3){
             intent.putExtra("VALUE", db1 * db2);
         } else if (v.getId() == R.id.button4){
-            intent.putExtra("VALUE", db1 / db2);
+            if (db2 == 0){
+                Toast toast = Toast.makeText(MainActivity.this,"0で割ることはできません", Toast.LENGTH_LONG);
+                toast.show();
+            } else intent.putExtra("VALUE", db1 / db2);
         }
         startActivity(intent);
+        } catch (Exception e){
+            Toast toast =Toast.makeText(MainActivity.this, "数値で入力してください", Toast.LENGTH_LONG);
+            toast.show();
     }
+
+}
 }
